@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z Learn Programming – المنصة التعليمية</title>
+    <style>
+        /* ===== التصميم العام ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: #f5f7fa;
+            color: #1e293b;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        /* الرأس */
+        header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #38bdf8;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-links a:hover {
+            color: white;
+            border-bottom-color: #38bdf8;
+        }
+        /* المحتوى الرئيسي */
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        h2 {
+            font-size: 2rem;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+            border-right: 5px solid #38bdf8;
+            padding-right: 1rem;
+        }
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: #334155;
+        }
+        /* الأزرار */
+        .btn {
+            display: inline-block;
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .btn:hover {
+            background: #0284c7;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .cta-buttons {
+            margin: 2rem 0;
+        }
+        /* البطاقات والعناصر */
+        .video-placeholder {
+            background: #cbd5e1;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            border: 2px dashed #64748b;
+        }
+        .fake-video {
+            background: #1e293b;
+            height: 180px;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 1.2rem;
+        }
+        .fake-video::before {
+            content: "🎬 فيديو تجريبي (الرابط #)";
+        }
+        /* شبكة الدروس */
+        .lessons-grid {
+            margin: 2rem 0;
+        }
+        .lesson-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .lesson-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .lesson-item:hover {
+            background: #38bdf8;
+            color: white;
+            transform: scale(1.02);
+        }
+        /* الأسئلة */
+        .quiz-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            margin: 2rem 0;
+        }
+        .question {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border-right: 3px solid #38bdf8;
+            background: #f8fafc;
+            border-radius: 0 12px 12px 0;
+        }
+        .question p {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+        .question label {
+            display: block;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .question label:hover {
+            background: #e2e8f0;
+        }
+        .feedback {
+            display: block;
+            margin-top: 0.8rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .feedback.correct {
+            background: #bbf7d0;
+            color: #166534;
+        }
+        .feedback.wrong {
+            background: #fecaca;
+            color: #991b1b;
+        }
+        /* التذييل */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid #334155;
+        }
+        footer .designer {
+            color: #38bdf8;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        /* استجابة */
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .cta-buttons .btn {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Z Learn Programming</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" onclick="showPage('home'); return false;">الرئيسية</a></li>
+                    <li><a href="#" onclick="showPage('what-is-programming'); return false;">ما هي البرمجة؟</a></li>
+                    <li><a href="#" onclick="showPage('programming-languages'); return false;">ما هي لغات البرمجة؟</a></li>
+                    <li><a href="#" onclick="showPage('where-to-write-code'); return false;">أين نكتب الأكواد؟</a></li>
+                    <li><a href="#" onclick="showPage('html'); return false;">HTML</a></li>
+                    <li><a href="#" onclick="showPage('css'); return false;">CSS</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- الصفحة الرئيسية -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <div class="container">
+                    <h2>Z Learn Programming</h2>
+                    <p class="subtitle" style="font-size:1.3rem; color:#334155;">منصة لتعلم البرمجة خطوة بخطوة حتى الاحتراف</p>
+                    <div class="cta-buttons">
+                        <a href="#" onclick="showPage('what-is-programming'); return false;" class="btn">ما هي البرمجة؟</a>
+                        <a href="#" onclick="showPage('programming-languages'); return false;" class="btn">ما هي لغات البرمجة؟</a>
+                        <a href="#" onclick="showPage('where-to-write-code'); return false;" class="btn">أين نكتب الأكواد؟</a>
+                        <a href="#" onclick="showPage('html'); return false;" class="btn">HTML</a>
+                        <a href="#" onclick="showPage('css'); return false;" class="btn">CSS</a>
+                    </div>
+                </div>
+            </section>
+            <section class="overview">
+                <div class="container">
+                    <h3>ابدأ رحلتك التعليمية</h3>
+                    <p>اختر المسار المناسب وابدأ التعلم الآن. نوفر لك دروساً تفاعلية وأسئلة لاختبار فهمك.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- ما هي البرمجة؟ -->
+        <div id="what-is-programming" class="page">
+            <div class="container">
+                <h2>ما هي البرمجة؟</h2>
+                <iframe width="100%" height="315"
+src="https://www.youtube.com/embed/zQ3U-UdmMgw"
+title="ما هي البرمجة"
+frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen>
+</iframe>
+                </div>
+                <section class="quiz-section">
+                    <h3>اختبر فهمك</h3>
+                    <form class="quiz-form" data-quiz="programming">
+                        <div class="question" data-correct="a">
+                            <p>1. ما هي البرمجة؟</p>
+                            <label><input type="radio" name="q_prog1" value="a"> أ) كتابة الأوامر للحاسوب لتنفيذ مهام معينة</label>
+                            <label><input type="radio" name="q_prog1" value="b"> ب) تصميم المواقع</label>
+                            <label><input type="radio" name="q_prog1" value="c"> ج) تجميع الحاسوب</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="b">
+                            <p>2. أي مما يلي ليس لغة برمجة؟</p>
+                            <label><input type="radio" name="q_prog2" value="a"> أ) بايثون</label>
+                            <label><input type="radio" name="q_prog2" value="b"> ب) HTML</label>
+                            <label><input type="radio" name="q_prog2" value="c"> ج) جافا</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="a">
+                            <p>3. ما هي وظيفة المترجم (Compiler)؟</p>
+                            <label><input type="radio" name="q_prog3" value="a"> أ) تحويل الكود إلى لغة الآلة</label>
+                            <label><input type="radio" name="q_prog3" value="b"> ب) تنفيذ الكود سطراً سطراً</label>
+                            <label><input type="radio" name="q_prog3" value="c"> ج) تصحيح الأخطاء</label>
+                            <span class="feedback"></span>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <!-- ما هي لغات البرمجة؟ -->
+        <div id="programming-languages" class="page">
+            <div class="container">
+                <h2>ما هي لغات البرمجة؟</h2>
+                <div class="video-placeholder">
+                    <p>فيديو تعريفي (الرابط: #)</p>
+                    <div class="fake-video"></div>
+                </div>
+                <section class="quiz-section">
+                    <h3>اختبر فهمك</h3>
+                    <form class="quiz-form" data-quiz="languages">
+                        <div class="question" data-correct="a">
+                            <p>1. أي من هذه اللغات تستخدم غالباً لتطوير الويب؟</p>
+                            <label><input type="radio" name="q_lang1" value="a"> أ) جافا سكريبت</label>
+                            <label><input type="radio" name="q_lang1" value="b"> ب) جافا</label>
+                            <label><input type="radio" name="q_lang1" value="c"> ج) سي شارب</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="c">
+                            <p>2. لغة بايثون تستخدم في:</p>
+                            <label><input type="radio" name="q_lang2" value="a"> أ) تحليل البيانات</label>
+                            <label><input type="radio" name="q_lang2" value="b"> ب) تطوير الألعاب</label>
+                            <label><input type="radio" name="q_lang2" value="c"> ج) جميع ما ذكر</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="a">
+                            <p>3. أي لغة تعتبر منخفضة المستوى؟</p>
+                            <label><input type="radio" name="q_lang3" value="a"> أ) أسمبلي</label>
+                            <label><input type="radio" name="q_lang3" value="b"> ب) بايثون</label>
+                            <label><input type="radio" name="q_lang3" value="c"> ج) جافا</label>
+                            <span class="feedback"></span>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <!-- أين نكتب الأكواد؟ -->
+        <div id="where-to-write-code" class="page">
+            <div class="container">
+                <h2>أين نكتب الأكواد؟</h2>
+                <div class="video-placeholder">
+                    <p>فيديو تعريفي (الرابط: #)</p>
+                    <div class="fake-video"></div>
+                </div>
+                <section class="quiz-section">
+                    <h3>اختبر فهمك</h3>
+                    <form class="quiz-form" data-quiz="where">
+                        <div class="question" data-correct="a">
+                            <p>1. ما هو البرنامج المستخدم لكتابة الأكواد؟</p>
+                            <label><input type="radio" name="q_where1" value="a"> أ) محرر نصوص</label>
+                            <label><input type="radio" name="q_where1" value="b"> ب) متصفح</label>
+                            <label><input type="radio" name="q_where1" value="c"> ج) نظام تشغيل</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="b">
+                            <p>2. أي من هذه برامج تحرير كود؟</p>
+                            <label><input type="radio" name="q_where2" value="a"> أ) Microsoft Word</label>
+                            <label><input type="radio" name="q_where2" value="b"> ب) Visual Studio Code</label>
+                            <label><input type="radio" name="q_where2" value="c"> ج) Paint</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="b">
+                            <p>3. ما هي بيئة التطوير المتكاملة (IDE)؟</p>
+                            <label><input type="radio" name="q_where3" value="a"> أ) برنامج لتصميم الجرافيك</label>
+                            <label><input type="radio" name="q_where3" value="b"> ب) برنامج يجمع محرر كود وأدوات تطوير</label>
+                            <label><input type="radio" name="q_where3" value="c"> ج) موقع لتعلم البرمجة</label>
+                            <span class="feedback"></span>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <!-- HTML -->
+        <div id="html" class="page">
+            <div class="container">
+                <h2>لغة HTML</h2>
+                <div class="video-placeholder">
+                    <p>فيديو تعريفي (الرابط: #)</p>
+                    <div class="fake-video"></div>
+                </div>
+                <section class="lessons-grid">
+                    <h3>الدروس (20 درس)</h3>
+                    <div class="lesson-list">
+                        <a href="html-lessons/lesson1.html" class="lesson-item">الدرس 1: مقدمة</a>
+                        <a href="html-lessons/lesson2.html" class="lesson-item">الدرس 2: العناصر</a>
+                        <a href="html-lessons/lesson3.html" class="lesson-item">الدرس 3: النصوص</a>
+                        <a href="html-lessons/lesson4.html" class="lesson-item">الدرس 4: الصور</a>
+                        <a href="html-lessons/lesson5.html" class="lesson-item">الدرس 5: الروابط</a>
+                        <a href="html-lessons/lesson6.html" class="lesson-item">الدرس 6: القوائم</a>
+                        <a href="html-lessons/lesson7.html" class="lesson-item">الدرس 7: الجداول</a>
+                        <a href="html-lessons/lesson8.html" class="lesson-item">الدرس 8: النماذج</a>
+                        <a href="html-lessons/lesson9.html" class="lesson-item">الدرس 9: الوسائط</a>
+                        <a href="html-lessons/lesson10.html" class="lesson-item">الدرس 10: الدلالة</a>
+                        <a href="html-lessons/lesson11.html" class="lesson-item">الدرس 11: الترويسة</a>
+                        <a href="html-lessons/lesson12.html" class="lesson-item">الدرس 12: التذييل</a>
+                        <a href="html-lessons/lesson13.html" class="lesson-item">الدرس 13: الأقسام</a>
+                        <a href="html-lessons/lesson14.html" class="lesson-item">الدرس 14: العناصر المضمنة</a>
+                        <a href="html-lessons/lesson15.html" class="lesson-item">الدرس 15: العناصر الكتلية</a>
+                        <a href="html-lessons/lesson16.html" class="lesson-item">الدرس 16: السمات</a>
+                        <a href="html-lessons/lesson17.html" class="lesson-item">الدرس 17: كلاس و ID</a>
+                        <a href="html-lessons/lesson18.html" class="lesson-item">الدرس 18: تعليقات</a>
+                        <a href="html-lessons/lesson19.html" class="lesson-item">الدرس 19: الترميز</a>
+                        <a href="html-lessons/lesson20.html" class="lesson-item">الدرس 20: مشروع بسيط</a>
+                    </div>
+                </section>
+                <section class="quiz-section">
+                    <h3>اختبر فهمك في HTML</h3>
+                    <form class="quiz-form" data-quiz="html">
+                        <div class="question" data-correct="a">
+                            <p>1. ماذا تعني HTML؟</p>
+                            <label><input type="radio" name="q_html1" value="a"> أ) HyperText Markup Language</label>
+                            <label><input type="radio" name="q_html1" value="b"> ب) HighText Machine Language</label>
+                            <label><input type="radio" name="q_html1" value="c"> ج) Hyper Tool Markup Language</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="b">
+                            <p>2. أي علامة تستخدم لإدراج صورة؟</p>
+                            <label><input type="radio" name="q_html2" value="a"> أ) &lt;img&gt;</label>
+                            <label><input type="radio" name="q_html2" value="b"> ب) &lt;image&gt;</label>
+                            <label><input type="radio" name="q_html2" value="c"> ج) &lt;pic&gt;</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="c">
+                            <p>3. أي عنصر يستخدم لإنشاء رابط؟</p>
+                            <label><input type="radio" name="q_html3" value="a"> أ) &lt;link&gt;</label>
+                            <label><input type="radio" name="q_html3" value="b"> ب) &lt;url&gt;</label>
+                            <label><input type="radio" name="q_html3" value="c"> ج) &lt;a&gt;</label>
+                            <span class="feedback"></span>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <!-- CSS -->
+        <div id="css" class="page">
+            <div class="container">
+                <h2>لغة CSS</h2>
+                <div class="video-placeholder">
+                    <p>فيديو تعريفي (الرابط: #)</p>
+                    <div class="fake-video"></div>
+                </div>
+                <section class="lessons-grid">
+                    <h3>الدروس (15 درس)</h3>
+                    <div class="lesson-list">
+                        <a href="css-lessons/lesson1.html" class="lesson-item">الدرس 1: مقدمة</a>
+                        <a href="css-lessons/lesson2.html" class="lesson-item">الدرس 2: المحددات</a>
+                        <a href="css-lessons/lesson3.html" class="lesson-item">الدرس 3: الألوان</a>
+                        <a href="css-lessons/lesson4.html" class="lesson-item">الدرس 4: الخلفيات</a>
+                        <a href="css-lessons/lesson5.html" class="lesson-item">الدرس 5: الحدود</a>
+                        <a href="css-lessons/lesson6.html" class="lesson-item">الدرس 6: الهوامش والحشوة</a>
+                        <a href="css-lessons/lesson7.html" class="lesson-item">الدرس 7: النصوص والخطوط</a>
+                        <a href="css-lessons/lesson8.html" class="lesson-item">الدرس 8: العرض والارتفاع</a>
+                        <a href="css-lessons/lesson9.html" class="lesson-item">الدرس 9: نموذج الصندوق</a>
+                        <a href="css-lessons/lesson10.html" class="lesson-item">الدرس 10: المرونة (Flexbox)</a>
+                        <a href="css-lessons/lesson11.html" class="lesson-item">الدرس 11: الشبكة (Grid)</a>
+                        <a href="css-lessons/lesson12.html" class="lesson-item">الدرس 12: الموضع (Position)</a>
+                        <a href="css-lessons/lesson13.html" class="lesson-item">الدرس 13: التأثيرات</a>
+                        <a href="css-lessons/lesson14.html" class="lesson-item">الدرس 14: التجاوب</a>
+                        <a href="css-lessons/lesson15.html" class="lesson-item">الدرس 15: متغيرات CSS</a>
+                    </div>
+                </section>
+                <section class="quiz-section">
+                    <h3>اختبر فهمك في CSS</h3>
+                    <form class="quiz-form" data-quiz="css">
+                        <div class="question" data-correct="b">
+                            <p>1. ماذا تعني CSS؟</p>
+                            <label><input type="radio" name="q_css1" value="a"> أ) Computer Style Sheets</label>
+                            <label><input type="radio" name="q_css1" value="b"> ب) Cascading Style Sheets</label>
+                            <label><input type="radio" name="q_css1" value="c"> ج) Creative Style System</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="c">
+                            <p>2. أي خاصية تغير لون النص؟</p>
+                            <label><input type="radio" name="q_css2" value="a"> أ) background-color</label>
+                            <label><input type="radio" name="q_css2" value="b"> ب) font-color</label>
+                            <label><input type="radio" name="q_css2" value="c"> ج) color</label>
+                            <span class="feedback"></span>
+                        </div>
+                        <div class="question" data-correct="a">
+                            <p>3. أي محدد يستخدم لاستهداف عنصر برقم id "header"؟</p>
+                            <label><input type="radio" name="q_css3" value="a"> أ) #header</label>
+                            <label><input type="radio" name="q_css3" value="b"> ب) .header</label>
+                            <label><input type="radio" name="q_css3" value="c"> ج) header</label>
+                            <span class="feedback"></span>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Z Learn Programming – جميع الحقوق محفوظة</p>
+            <p class="designer">Designed by Zeno Dayoub</p>
+        </div>
+    </footer>
+
+    <script>
+        // دالة لإظهار الصفحة المحددة وإخفاء الباقي
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            // تمرير سلس للمحتوى
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // إعداد الاختبارات التفاعلية (تصحيح فوري)
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizForms = document.querySelectorAll('.quiz-form');
+            quizForms.forEach(form => {
+                const questions = form.querySelectorAll('.question');
+                questions.forEach(question => {
+                    const radios = question.querySelectorAll('input[type="radio"]');
+                    radios.forEach(radio => {
+                        radio.addEventListener('change', function(e) {
+                            // الحصول على الإجابة الصحيحة من data-correct
+                            const correctValue = question.dataset.correct;
+                            const selectedValue = this.value;
+                            const feedbackSpan = question.querySelector('.feedback');
+                            
+                            if (selectedValue === correctValue) {
+                                feedbackSpan.textContent = '✅ إجابة صحيحة';
+                                feedbackSpan.className = 'feedback correct';
+                            } else {
+                                feedbackSpan.textContent = '❌ إجابة خاطئة، حاول مرة أخرى';
+                                feedbackSpan.className = 'feedback wrong';
+                            }
+                        });
+                    });
+                });
+            });
+
+            // التعامل مع روابط التنقل التي تستخدم showPage (بالإضافة إلى onclick في HTML)
+            // نضمن أن الروابط في القائمة العلوية تستخدم showPage بشكل صحيح
+        });
+
+        // تجنب سلوك الروابط الافتراضي لأزرار الصفحة الرئيسية
+        // لا حاجة لإضافي لأن onclick يعيد false
+    </script>
+</body>
+</html>
